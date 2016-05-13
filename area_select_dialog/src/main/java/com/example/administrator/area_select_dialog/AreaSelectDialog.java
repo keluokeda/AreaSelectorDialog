@@ -32,19 +32,21 @@ import javax.xml.parsers.SAXParserFactory;
 public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, View.OnClickListener {
 
     /**
-     * 初始化三级联动的数据
-     *
+     * 初始化 三级联动对话框内容数据
      * @param inputStream 包含数据的流
+     * @param firstElementName 主元素的名称
+     * @param secondElementName 二级元素的名称
+     * @param thirdElementName 三级元素的名称
      * @return 成功返回true
      */
-    public static boolean initAreaData(InputStream inputStream) {
+    public static boolean initAreaData(InputStream inputStream,String firstElementName,String secondElementName,String thirdElementName) {
         boolean isSuccess = false;
         try {
             // 创建一个解析xml的工厂对象
             SAXParserFactory spf = SAXParserFactory.newInstance();
             // 解析xml
             SAXParser parser = spf.newSAXParser();
-            XmlParserHandler handler = new XmlParserHandler();
+            XmlParserHandler handler = new XmlParserHandler(firstElementName,secondElementName,thirdElementName);
             parser.parse(inputStream, handler);
             inputStream.close();
 
@@ -62,7 +64,7 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
                     cityNames[j] = cityList.get(j).getName();
                     List<DistrictModel> districtList = cityList.get(j).getDistrictList();
                     String[] distrinctNameArray = new String[districtList.size()];
-                    DistrictModel[] distrinctArray = new DistrictModel[districtList.size()];
+                   // DistrictModel[] distrinctArray = new DistrictModel[districtList.size()];
                     sCityIdDatasMap.put(sProvinceDatas[i] + cityList.get(j).getName(), cityList.get(j).getId());
                     for (int k = 0; k < districtList.size(); k++) {
                         // 遍历市下面所有区/县的数据
@@ -70,7 +72,7 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
                         // 区/县对于的邮编，保存到mZipcodeDatasMap
                         //  mZipcodeDatasMap.put(districtList.get(k).getName(), districtList.get(k).getZipcode());
                         sDistrictIdDatasMap.put(sProvinceDatas[i] + cityList.get(j).getName() + districtList.get(k).getName(), districtList.get(k).getId());
-                        distrinctArray[k] = districtModel;
+                      //  distrinctArray[k] = districtModel;
                         distrinctNameArray[k] = districtModel.getName();
                     }
                     // 市-区/县的数据，保存到mDistrictDatasMap
@@ -81,7 +83,7 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
             }
             isSuccess = true;
         } catch (Throwable t) {
-                t.printStackTrace();
+            t.printStackTrace();
         }
         return isSuccess;
     }
@@ -165,6 +167,9 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
 
     }
 
+    /**
+     * 设置默认选中的条目
+     */
     private void setDefaultSeltctorItem() {
         if (areaBean == null) {
             wv_province.setCurrentItem(0);
@@ -215,7 +220,6 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
         wv_province = (WheelView) findViewById(R.id.wv_dialog_province);
         wv_city = (WheelView) findViewById(R.id.wv_dialog_city);
         wv_district = (WheelView) findViewById(R.id.wv_dialog_district);
-
         btn_cancel = (Button) findViewById(R.id.btn_dialog_cancel);
         btn_sure = (Button) findViewById(R.id.btn_dialog_sure);
     }
@@ -224,18 +228,12 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
         wv_province.addChangingListener(this);
         wv_city.addChangingListener(this);
         wv_district.addChangingListener(this);
-
         btn_cancel.setOnClickListener(this);
         btn_sure.setOnClickListener(this);
     }
 
     private void initData() {
         wv_province.setViewAdapter(new ArrayWheelAdapter<>(mContext, sProvinceDatas));
-        // 设置可见条目数量
-//        wv_province.setVisibleItems(5);
-//        wv_city.setVisibleItems(5);
-//        wv_district.setVisibleItems(5);
-
         updateCities();
         updateAreas();
     }
@@ -298,7 +296,6 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
         } else if (v.getId() == R.id.btn_dialog_sure) {
             areaSelectLintener.refreshArea(new AreaBean(mCurrentProviceName, mCurrentProviceId, mCurrentCityName, mCurrentCityId, mCurrentDistrictName, mCurrentDistrictId));
             dismiss();
-
         }
     }
 

@@ -42,10 +42,6 @@ public class CityModel {
         this.districtList = districtList;
     }
 
-    @Override
-    public String toString() {
-        return "CityModel [name=" + name + ", districtList=" + districtList
-                + "]";
-    }
+
 
 }

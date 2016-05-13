@@ -42,9 +42,5 @@ public class ProvinceModel {
         this.cityList = cityList;
     }
 
-    @Override
-    public String toString() {
-        return "ProvinceModel [name=" + name + ", cityList=" + cityList + "]";
-    }
 
 }

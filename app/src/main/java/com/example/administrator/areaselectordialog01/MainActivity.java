@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
         mTextView= (TextView) findViewById(R.id.tv);
 
         try {
-            AreaSelectDialog.initAreaData(getAssets().open("province_data_01.xml"));
+            AreaSelectDialog.initAreaData(getAssets().open("province_data_01.xml"),"province","city","district");
         }catch (Exception e){
             e.printStackTrace();
         }
