@@ -3,7 +3,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <!--半透明灰色 -->
-    <color name="province_line_border">#C7C7C7</color>
-    <color name="touming_dialog">#88000000</color>
+
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--半透明灰色 -->
+    <color name="province_line_border">#C7C7C7</color>
+    <color name="touming_dialog">#88000000</color>
+</resources>
