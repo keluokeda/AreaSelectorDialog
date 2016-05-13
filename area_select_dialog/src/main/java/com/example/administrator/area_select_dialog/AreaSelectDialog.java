@@ -1,4 +1,4 @@
-package com.example.administrator.areaselectordialog01;
+package com.example.administrator.area_select_dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.Button;
 
 
-import com.example.administrator.areaselectordialog01.adapter.ArrayWheelAdapter;
-import com.example.administrator.areaselectordialog01.interfaces.OnWheelChangedListener;
-import com.example.administrator.areaselectordialog01.model.AreaBean;
-import com.example.administrator.areaselectordialog01.model.CityModel;
-import com.example.administrator.areaselectordialog01.model.DistrictModel;
-import com.example.administrator.areaselectordialog01.model.ProvinceModel;
-import com.example.administrator.areaselectordialog01.view.WheelView;
+import com.example.administrator.area_select_dialog.adapter.ArrayWheelAdapter;
+import com.example.administrator.area_select_dialog.interfaces.OnWheelChangedListener;
+import com.example.administrator.area_select_dialog.model.AreaBean;
+import com.example.administrator.area_select_dialog.model.CityModel;
+import com.example.administrator.area_select_dialog.model.DistrictModel;
+import com.example.administrator.area_select_dialog.model.ProvinceModel;
+import com.example.administrator.area_select_dialog.view.WheelView;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,13 +27,13 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * 区域选择对话框
  */
+
 @SuppressWarnings("unused")
 public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, View.OnClickListener {
-    private Context mContext;
-    private WheelView wv_province, wv_city, wv_district;
 
     /**
      * 初始化三级联动的数据
+     *
      * @param inputStream 包含数据的流
      * @return 成功返回true
      */
@@ -63,13 +63,13 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
                     List<DistrictModel> districtList = cityList.get(j).getDistrictList();
                     String[] distrinctNameArray = new String[districtList.size()];
                     DistrictModel[] distrinctArray = new DistrictModel[districtList.size()];
-                    sCityIdDatasMap.put(sProvinceDatas[i]+cityList.get(j).getName(), cityList.get(j).getId());
+                    sCityIdDatasMap.put(sProvinceDatas[i] + cityList.get(j).getName(), cityList.get(j).getId());
                     for (int k = 0; k < districtList.size(); k++) {
                         // 遍历市下面所有区/县的数据
                         DistrictModel districtModel = new DistrictModel(districtList.get(k).getName(), districtList.get(k).getId());
                         // 区/县对于的邮编，保存到mZipcodeDatasMap
                         //  mZipcodeDatasMap.put(districtList.get(k).getName(), districtList.get(k).getZipcode());
-                        sDistrictIdDatasMap.put(sProvinceDatas[i]+cityList.get(j).getName()+districtList.get(k).getName(), districtList.get(k).getId());
+                        sDistrictIdDatasMap.put(sProvinceDatas[i] + cityList.get(j).getName() + districtList.get(k).getName(), districtList.get(k).getId());
                         distrinctArray[k] = districtModel;
                         distrinctNameArray[k] = districtModel.getName();
                     }
@@ -81,10 +81,11 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
             }
             isSuccess = true;
         } catch (Throwable t) {
-
+                t.printStackTrace();
         }
         return isSuccess;
     }
+
     /**
      * 所有省
      */
@@ -92,24 +93,24 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
     /**
      * key - 省 value - 市[]
      */
-    protected static Map<String, String[]> sCityDataMap = new HashMap<String, String[]>();
+    protected static Map<String, String[]> sCityDataMap = new HashMap<>();
     /**
      * key - 市 values - 区[]
      */
-    protected static Map<String, String[]> sDistrictMap = new HashMap<String, String[]>();
+    protected static Map<String, String[]> sDistrictMap = new HashMap<>();
 
     /**
      * 省名称 省id
      */
-    protected static Map<String, String> sProvinceIdDatasMap = new HashMap<String, String>();
+    protected static Map<String, String> sProvinceIdDatasMap = new HashMap<>();
     /**
      * 省名称+市名称 市id
      */
-    protected static Map<String, String> sCityIdDatasMap = new HashMap<String, String>();
+    protected static Map<String, String> sCityIdDatasMap = new HashMap<>();
     /**
      * 省名称+市名称+区名称 区id
      */
-    protected static Map<String, String> sDistrictIdDatasMap = new HashMap<String, String>();
+    protected static Map<String, String> sDistrictIdDatasMap = new HashMap<>();
 
 
     /**
@@ -137,24 +138,17 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
      * 点击确认的回调接口
      */
     public interface AreaSelectLintener {
-         void refreshArea(AreaBean bean);
+        void refreshArea(AreaBean bean);
     }
 
     private AreaSelectLintener areaSelectLintener;
 
 
-    public AreaSelectDialog(Context context, AreaSelectLintener areaSelectLintener, int type) {
-        super(context, R.style.Dialog_FS);
-        this.mContext = context;
-        this.areaSelectLintener = areaSelectLintener;
-        this.type = type;
-    }
-
     public AreaSelectDialog(Context context, AreaSelectLintener areaSelectLintener) {
         super(context, R.style.Dialog_FS);
         this.mContext = context;
         this.areaSelectLintener = areaSelectLintener;
-        areaBean=null;
+        areaBean = null;
 
     }
 
@@ -236,7 +230,7 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
     }
 
     private void initData() {
-        wv_province.setViewAdapter(new ArrayWheelAdapter<String>(mContext, sProvinceDatas));
+        wv_province.setViewAdapter(new ArrayWheelAdapter<>(mContext, sProvinceDatas));
         // 设置可见条目数量
 //        wv_province.setVisibleItems(5);
 //        wv_city.setVisibleItems(5);
@@ -257,7 +251,7 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
         if (cities == null) {
             cities = new String[]{""};
         }
-        wv_city.setViewAdapter(new ArrayWheelAdapter<String>(mContext, cities));
+        wv_city.setViewAdapter(new ArrayWheelAdapter<>(mContext, cities));
         wv_city.setCurrentItem(0);
         updateAreas();
 
@@ -270,21 +264,18 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
     private void updateAreas() {
         int pCurrent = wv_city.getCurrentItem();
         mCurrentCityName = sCityDataMap.get(mCurrentProviceName)[pCurrent];
-        mCurrentCityId = sCityIdDatasMap.get(mCurrentProviceName+mCurrentCityName);
+        mCurrentCityId = sCityIdDatasMap.get(mCurrentProviceName + mCurrentCityName);
         String[] areas = sDistrictMap.get(mCurrentCityName);
 
         if (areas == null) {
             areas = new String[]{""};
         }
-        wv_district.setViewAdapter(new ArrayWheelAdapter<String>(mContext, areas));
+        wv_district.setViewAdapter(new ArrayWheelAdapter<>(mContext, areas));
         wv_district.setCurrentItem(0);
 
         mCurrentDistrictName = areas[0];
-        mCurrentDistrictId = sDistrictIdDatasMap.get(mCurrentProviceName+mCurrentCityName+mCurrentDistrictName);
+        mCurrentDistrictId = sDistrictIdDatasMap.get(mCurrentProviceName + mCurrentCityName + mCurrentDistrictName);
     }
-
-
-
 
 
     @Override
@@ -295,27 +286,20 @@ public class AreaSelectDialog extends Dialog implements OnWheelChangedListener, 
             updateAreas();
         } else if (wheel == wv_district) {
             mCurrentDistrictName = sDistrictMap.get(mCurrentCityName)[newValue];
-            mCurrentDistrictId = sDistrictIdDatasMap.get(mCurrentProviceName+mCurrentCityName+mCurrentDistrictName);
+            mCurrentDistrictId = sDistrictIdDatasMap.get(mCurrentProviceName + mCurrentCityName + mCurrentDistrictName);
         }
     }
 
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-
-            case R.id.btn_dialog_cancel:
-                super.dismiss();
-                break;
-            case R.id.btn_dialog_sure:
-
-                areaSelectLintener.refreshArea(new AreaBean(mCurrentProviceName, mCurrentProviceId, mCurrentCityName, mCurrentCityId, mCurrentDistrictName, mCurrentDistrictId));
-                dismiss();
-                break;
+        if (v.getId() == R.id.btn_dialog_cancel) {
+            super.dismiss();
+        } else if (v.getId() == R.id.btn_dialog_sure) {
+            areaSelectLintener.refreshArea(new AreaBean(mCurrentProviceName, mCurrentProviceId, mCurrentCityName, mCurrentCityId, mCurrentDistrictName, mCurrentDistrictId));
+            dismiss();
 
         }
-
     }
-
 
 }

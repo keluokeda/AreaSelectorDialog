@@ -1,5 +1,6 @@
 package com.example.administrator.areaselectordialog01;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ public class MainActivity extends Activity {
         try {
             AreaSelectDialog.initAreaData(getAssets().open("province_data_01.xml"));
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
