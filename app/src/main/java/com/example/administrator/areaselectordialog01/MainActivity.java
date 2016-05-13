@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.administrator.areaselectordialog01.model.AreaBean;
+
 public class MainActivity extends AppCompatActivity {
+    private AreaBean mAreaBean;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +21,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        try {
+            AreaSelectDialog.initAreaData(getAssets().open("province_data_01.xml"));
+        }catch (Exception e){
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        }
+         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               new AreaSelectDialog(MainActivity.this,null).show();
+               new AreaSelectDialog(MainActivity.this, new AreaSelectDialog.AreaSelectLintener() {
+                   @Override
+                   public void refreshArea(AreaBean bean) {
+                       mAreaBean=bean;
+                   }
+               },mAreaBean).show();
             }
         });
     }
@@ -43,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Snackbar.make(fab,"0000",Snackbar.LENGTH_SHORT).show();
             return true;
         }
 
